@@ -4,6 +4,6 @@
 
 config HZ
 	int "muh hz"
-	default 300
+	default 600
 config SCHED_HRTICK
 	def_bool HIGH_RES_TIMERS

@@ -118,7 +118,7 @@ void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, bool of)
 	for_each_cpu(cpu, cpumask) {
 		cpu_dev = get_cpu_device(cpu);
 		if (!cpu_dev) {
-			pr_err("%s: failed to get cpu%d device\n", __func__,
+			pr_debug("%s: failed to get cpu%d device\n", __func__,
 			       cpu);
 			continue;
 		}

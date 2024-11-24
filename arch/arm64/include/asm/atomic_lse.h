@@ -32,7 +32,12 @@ static inline void atomic_##op(int i, atomic_t *v)			\
 	register int w0 asm ("w0") = i;					\
 	register atomic_t *x1 asm ("x1") = v;				\
 									\
-	asm volatile(ARM64_LSE_ATOMIC_INSN(__LL_SC_ATOMIC(op),		\
+	asm volatile(ARM64_LSE_ATOMIC_INSN(				\
+	/* LL/SC */							\
+	__LL_SC_ATOMIC(op)						\
+	__nops(1),							\
+	/* LSE atomics */						\
+"	prfm	pstl1strm, %[v]\n"					\
 "	" #asm_op "	%w[i], %[v]\n")					\
 	: [i] "+r" (w0), [v] "+Q" (v->counter)				\
 	: "r" (x1)							\
@@ -54,8 +59,10 @@ static inline int atomic_fetch_##op##name(int i, atomic_t *v)		\
 									\
 	asm volatile(ARM64_LSE_ATOMIC_INSN(				\
 	/* LL/SC */							\
-	__LL_SC_ATOMIC(fetch_##op##name),				\
+	__LL_SC_ATOMIC(fetch_##op##name)				\
+	__nops(1),							\
 	/* LSE atomics */						\
+"	prfm	pstl1strm, %[v]\n"					\
 "	" #asm_op #mb "	%w[i], %w[i], %[v]")				\
 	: [i] "+r" (w0), [v] "+Q" (v->counter)				\
 	: "r" (x1)							\
@@ -87,8 +94,9 @@ static inline int atomic_add_return##name(int i, atomic_t *v)		\
 	asm volatile(ARM64_LSE_ATOMIC_INSN(				\
 	/* LL/SC */							\
 	__LL_SC_ATOMIC(add_return##name)				\
-	__nops(1),							\
+	__nops(2),							\
 	/* LSE atomics */						\
+	"	prfm	pstl1strm, %[v]\n"				\
 	"	ldadd" #mb "	%w[i], w30, %[v]\n"			\
 	"	add	%w[i], %w[i], w30")				\
 	: [i] "+r" (w0), [v] "+Q" (v->counter)				\

@@ -1,16 +1,11 @@
 #!/bin/bash
 
-# Cleanup Env
-make mrproper
-make clean
-rm -rf out
-
 DIR=$(pwd)
 OUT_DIR=$DIR/out
 
 if [ ! -d $DIR/prebuilts/clang-r416183b ]; then
     echo 'clone Clang Prebuilt'
-    git clone https://github.com/LineageOS/android_prebuilts_clang_kernel_linux-x86_clang-r416183b.git $DIR/prebuilts/clang-r416183b
+    git clone https://github.com/Klozz/Yuki-clang $DIR/prebuilts/clang
 fi
 
 if [ ! -d $DIR/prebuilts/gcc ]; then
@@ -23,11 +18,11 @@ if [ ! -d $DIR/prebuilts/gcc64 ]; then
     git clone https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git $DIR/prebuilts/gcc64
 fi
 
-export PATH=$DIR/prebuilts/clang-r450784d/bin:$PATH
+export PATH=$DIR/prebuilts/clang/bin:$PATH
 export PATH=$DIR/prebuilts/gcc/bin:$PATH
 export PATH=$DIR/prebuilts/gcc64/bin:$PATH
 
-CLANG="$DIR/prebuilts/clang-r416183b/bin"
+CLANG="$DIR/prebuilts/clang/bin"
 GCC="$DIR/prebuilts/gcc/bin"
 GCC64="$DIR/prebuilts/gcc64/bin"
 

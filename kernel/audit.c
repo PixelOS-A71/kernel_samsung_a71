@@ -93,8 +93,8 @@ static int	audit_initialized;
 #define AUDIT_LOCKED	2
 /* Default state when kernel boots without any parameters. */
 // [ SEC_SELINUX_PORTING_COMMON
-u32     audit_enabled = AUDIT_ON;
-u32     audit_ever_enabled = !!AUDIT_ON;
+u32     audit_enabled = AUDIT_OFF;
+u32     audit_ever_enabled = !!AUDIT_OFF;
 // ] SEC_SELINUX_PORTING_COMMON
 
 EXPORT_SYMBOL_GPL(audit_enabled);
@@ -102,7 +102,7 @@ EXPORT_SYMBOL_GPL(audit_enabled);
 /* Default state when kernel boots without any parameters. */
 // [ SEC_SELINUX_PORTING_COMMON
 // Samsung Change Value from AUDIT_OFF to AUDIT_ON
-static u32  audit_default = AUDIT_ON;
+static u32  audit_default = AUDIT_OFF;
 // ] SEC_SELINUX_PORTING_COMMON
 
 /* If auditing cannot proceed, audit_failure selects what happens. */

@@ -1812,11 +1812,11 @@ static int lpm_suspend_prepare(void)
 #endif
 
 #ifdef CONFIG_SEC_PM
-	regulator_showall_enabled();
-	sec_clock_debug_print_enabled();
-
-	debug_masterstats_show("entry");
-	debug_rpmstats_show("entry");
+	if (msm_pm_sleep_sec_debug) {
+		msm_gpio_print_enabled();
+		sec_gpio_debug_print();
+		print_gpio_exp(NULL);
+	}
 #endif
 
 #ifdef CONFIG_SEC_PM_DEBUG
@@ -1837,9 +1837,11 @@ static void lpm_suspend_wake(void)
 	lpm_stats_suspend_exit();
 
 #ifdef CONFIG_SEC_PM
-	sec_debug_print_sleep_time();
-	debug_rpmstats_show("exit");
-	debug_masterstats_show("exit");
+	if (msm_pm_sleep_sec_debug) {
+		msm_gpio_print_enabled();
+		sec_gpio_debug_print();
+		print_gpio_exp(NULL);
+	}
 #endif
 }
 

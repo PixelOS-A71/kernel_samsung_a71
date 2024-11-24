@@ -730,9 +730,19 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, attribute-alias)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS   += -pipe -Os
+KBUILD_CFLAGS   += -pipe -O3
 else
 KBUILD_CFLAGS   += -pipe -O3
+endif
+
+# Tell compiler to tune the performance of the code for a specified
+# target processor
+ifeq ($(cc-name),gcc)
+KBUILD_CFLAGS += -mcpu=cortex-a55+crc+crypto -mtune=cortex-a55 -funswitch-loops -funroll-loops -fpeel-loops -fsplit-loops -Wno-error
+KBUILD_AFLAGS += -mcpu=cortex-a55+crc+crypto -mtune=cortex-a55 -funswitch-loops -funroll-loops -fpeel-loops -fsplit-loops -Wno-error
+else ifeq ($(cc-name),clang)
+KBUILD_CFLAGS += -mcpu=cortex-a55 -mtune=cortex-a55 -funroll-loops
+KBUILD_AFLAGS += -mcpu=cortex-a55 -mtune=cortex-a55 -funroll-loops
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one

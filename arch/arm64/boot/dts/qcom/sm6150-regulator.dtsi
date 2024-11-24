@@ -55,6 +55,12 @@
 
 	/* pm6150 S1 - VDD_CX supply */
 	rpmh-regulator-cxlvl {
+		qcom,gx-retention; //Enable regulator retention level for IDLE modes
+		qcom,soft-start-enable = <0x1>; //enable soft start to start without current peaks that can damage device
+		qcom,hpm-enable = <0x1>; //enable high power mode
+		qcom,boost-current-limit = <14>; //3200mA maximum
+		qcom,ocp-enable = <1>; //enables over current protection
+		qcom,init-quiet-mode = <2>; //Regulator EMI noise reduction
 		compatible = "qcom,rpmh-arc-regulator";
 		mboxes = <&apps_rsc 0>;
 		qcom,resource-name = "cx.lvl";
@@ -71,6 +77,7 @@
 					<RPMH_REGULATOR_LEVEL_MAX>;
 			qcom,init-voltage-level =
 					<RPMH_REGULATOR_LEVEL_RETENTION>;
+			qcom,init-quiet-mode = <2>; //Regulator EMI noise reduction
 			qcom,min-dropout-voltage-level = <(-1)>;
 		};
 
